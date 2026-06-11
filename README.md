@@ -30,7 +30,7 @@ visual-web-stack/
 ## 安裝
 
 ```bash
-git clone <repo-url> visual-web-stack
+git clone https://github.com/astroicers/visual-web-stack.git
 cd visual-web-stack
 ./install.sh          # 已存在會詢問；--force 直接覆蓋
 ```
