@@ -93,7 +93,10 @@ export function HeroObject() {
 | 值的變化頻率 | 例子 | 讀取方式 |
 |--------------|------|---------|
 | 高頻（每 frame 變） | scrollProgress、滑鼠位置、速度 | `useFrame` 內 `getState()`；DOM 側用 `subscribe` + 直接改 style |
-| 低頻（使用者操作才變） | storyPhase、activeSection、主題、Dialog 開關 | 正常 hook 訂閱：`useAppStore((s) => s.storyPhase)` |
+| 低頻（使用者操作才變） | storyPhase、activeSection、主題 | 正常 hook 訂閱：`useAppStore((s) => s.storyPhase)` |
+
+（Dialog 開關這類**元件私有狀態**根本不進 store——留在元件的 `useState`，
+見下方守則——自然也不在此表的範圍內。）
 
 低頻值用 hook 訂閱是**正確**的——re-render 正是你要的（換文案、切 class）：
 

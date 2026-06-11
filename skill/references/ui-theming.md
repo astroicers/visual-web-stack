@@ -21,7 +21,7 @@
 import type { ReactNode } from 'react'
 import * as TooltipPrimitive from '@radix-ui/react-tooltip'
 
-/** 掛一次在 App 最外層 */
+/** 掛一次在 App 最外層（setup.md 的 App.tsx 組裝已包含） */
 export function TooltipProvider({ children }: { children: ReactNode }) {
   return <TooltipPrimitive.Provider delayDuration={200}>{children}</TooltipPrimitive.Provider>
 }
@@ -99,7 +99,11 @@ export function ThemeToggle() {
 
 主題是 DOM 側狀態。依「DOM 與 Canvas 只透過橋接通訊」的原則，
 `useTheme` 在 **Canvas 外**讀，再以 prop 傳進 3D 層（Canvas 內是另一個
-React reconciler，外層 context 不保證可達，prop 永遠安全）：
+React reconciler，外層 context 不保證可達，prop 永遠安全）。
+
+**ThemedStage 取代 three-layer.md Scene 裡的 `<Environment preset="city" />`**——
+一個場景只能有一個 Environment（後掛載的會覆寫前者的 `scene.environment`，
+還多載一份 HDR），採用本節模式時要把 Scene 裡那行刪掉：
 
 ```tsx
 // src/components/three/ThemedStage.tsx
@@ -145,6 +149,8 @@ export function ThreeLayer() {
       >
         <Suspense fallback={null}>
           <ThemedStage theme={sceneTheme} />
+          {/* Scene 內原本的 <Environment preset="city" /> 已移除，
+              環境光與背景統一由 ThemedStage 提供 */}
           <Scene />
         </Suspense>
         <Effects />

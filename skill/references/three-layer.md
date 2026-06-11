@@ -53,6 +53,8 @@ export function Scene() {
     <>
       <ambientLight intensity={0.4} />
       <directionalLight position={[3, 4, 5]} intensity={1.2} />
+      {/* 若採用 ui-theming.md 的 ThemedStage，刪掉這行——
+          一個場景只能有一個 Environment，後掛載的會覆寫前者的 scene.environment */}
       <Environment preset="city" />
       <HeroModel />
       <ContactShadows position={[0, -0.5, 0]} opacity={0.5} blur={2.4} far={4} />
@@ -142,16 +144,25 @@ export function Effects() {
       return next
     })
 
+  // EffectComposer 的 children 型別是 JSX.Element | JSX.Element[]，
+  // 不接受 {cond && <Effect/>} 產生的 false（TS2322）——用陣列組裝
+  const effects: JSX.Element[] = [<SMAA key="smaa" />]
+  if (level < 2) {
+    effects.push(<Bloom key="bloom" mipmapBlur luminanceThreshold={0.9} intensity={0.7} />)
+  }
+  if (level < 1) {
+    effects.push(
+      // radialModulation / modulationOffset 在 v2 型別中是必填，少了過不了 tsc
+      <ChromaticAberration key="ca" offset={chromaOffset} radialModulation={false} modulationOffset={0} />,
+      <Noise key="noise" premultiply opacity={0.15} />,
+    )
+  }
+  effects.push(<Vignette key="vignette" eskil={false} offset={0.15} darkness={0.85} />)
+
   return (
     <>
       <PerformanceMonitor onDecline={degrade} />
-      <EffectComposer multisampling={0}>
-        <SMAA />
-        {level < 2 && <Bloom mipmapBlur luminanceThreshold={0.9} intensity={0.7} />}
-        {level < 1 && <ChromaticAberration offset={chromaOffset} />}
-        {level < 1 && <Noise premultiply opacity={0.15} />}
-        <Vignette eskil={false} offset={0.15} darkness={0.85} />
-      </EffectComposer>
+      <EffectComposer multisampling={0}>{effects}</EffectComposer>
     </>
   )
 }

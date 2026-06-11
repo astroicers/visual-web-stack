@@ -33,7 +33,7 @@ description: |
 ├──────────────────────────────────────────────────────────────┤
 │  滾動編排層                                                   │
 │  Lenis（滾動物理）＋ GSAP ScrollTrigger（觸發點與時間軸）      │
-│  唯一的 RAF 來源：gsap.ticker                                 │
+│  滾動鏈路唯一的 RAF 來源：gsap.ticker                          │
 ├──────────────────────────────────────────────────────────────┤
 │  狀態層                                                       │
 │  Zustand — DOM 與 Canvas 之間「唯一」的通訊橋樑               │
@@ -47,9 +47,12 @@ DOM 事件（滾動、點擊、主題切換）寫入 store；Canvas 內以 trans
 
 ## 鐵則（MUST，違反即重寫）
 
-1. **單一 Lenis 實例、單一 RAF 來源**：全站只允許一個 Lenis 實例，且必須由
+1. **單一 Lenis 實例、滾動鏈路單一 RAF 來源**：全站只允許一個 Lenis 實例，且必須由
    `gsap.ticker` 驅動 `lenis.raf`（`gsap.ticker.add((t) => lenis.raf(t * 1000))`），
-   並設定 `gsap.ticker.lagSmoothing(0)`。禁止自建 `requestAnimationFrame` 迴圈。
+   並設定 `gsap.ticker.lagSmoothing(0)`。禁止為 Lenis / ScrollTrigger 另建
+   `requestAnimationFrame` 迴圈——滾動值必須在同一個 tick 餵給 ScrollTrigger，
+   否則觸發點讀到過期值。（R3F 的 frameloop 與 Anime.js 引擎各有自己的迴圈，
+   屬正常設計，不在此限。）
 2. **useFrame 內一律 transient read**：在 `useFrame` 內讀取 store 必須用
    `useAppStore.getState()`，禁止以 hook 訂閱高頻值（滾動進度、滑鼠位置）——
    hook 訂閱會讓元件每 frame re-render。

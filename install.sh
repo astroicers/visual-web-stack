@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 #
 # visual-web-stack skill 安裝腳本（macOS / Linux）
-# 用法：./install.sh [--force]
+# 用法：./install.sh [--force]（也可 sh install.sh，全腳本為 POSIX 相容）
 #   --force  目標已存在時直接覆蓋，不詢問
 
-set -euo pipefail
+# 不用 pipefail：本腳本無管線，且 pipefail 非 POSIX（dash 的 sh 會直接報錯）
+set -eu
 
 FORCE=0
 if [ "${1:-}" = "--force" ]; then
@@ -28,10 +29,15 @@ fi
 
 mkdir -p "$SKILLS_DIR"
 
-if [ -d "$DEST_DIR" ]; then
+# -e 抓不到 dangling symlink，要多檢查 -L（否則殘留的壞連結會讓後面 mkdir 失敗）
+if [ -e "$DEST_DIR" ] || [ -L "$DEST_DIR" ]; then
   if [ "$FORCE" -eq 1 ]; then
     echo "偵測到既有安裝（$DEST_DIR），--force 已指定，直接覆蓋。"
   else
+    if [ ! -t 0 ]; then
+      echo "錯誤：$DEST_DIR 已存在，且目前為非互動環境無法詢問，請改用 --force 覆蓋。" >&2
+      exit 1
+    fi
     printf '%s 已存在，要覆蓋嗎？ [y/N] ' "$DEST_DIR"
     read -r answer
     case "$answer" in
@@ -42,6 +48,7 @@ if [ -d "$DEST_DIR" ]; then
         ;;
     esac
   fi
+  # 路徑刻意不加結尾斜線：若 DEST 是 symlink，只移除連結本身、不動連結目標
   rm -rf "$DEST_DIR"
 fi
 

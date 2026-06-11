@@ -12,12 +12,12 @@
                 │ lenis.on('scroll')
                 ├──→ useAppStore.setScrollProgress()   （Canvas 透過 getState 讀）
                 └──→ ScrollTrigger.update()            （DOM 動畫觸發點同步）
-gsap.ticker ──→ lenis.raf(time * 1000)                 （唯一 RAF 來源）
+gsap.ticker ──→ lenis.raf(time * 1000)                 （滾動鏈路唯一 RAF 來源）
 ```
 
 ## SmoothScroll Provider（完整實作）
 
-全站唯一的 Lenis 實例。掛在 App 最外層（ThemeProvider 之內）。
+全站唯一的 Lenis 實例。掛在 App 的 provider 鏈內（ThemeProvider / TooltipProvider 之內，內容之外，見 setup.md 第 6 節）。
 
 ```tsx
 // src/providers/SmoothScroll.tsx
@@ -29,7 +29,7 @@ import { useAppStore } from '../stores/useAppStore'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// 模組層單例：給 scrollToTarget 用，同時保證重複 mount 時不會產生第二個實例
+// 模組層單例：給 scrollToTarget 用，並偵測重複掛載的 provider
 let activeLenis: Lenis | null = null
 
 /** 程式化捲動唯一入口（鐵則 #7：禁止 scrollIntoView） */
@@ -42,7 +42,16 @@ export function scrollToTarget(
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
-    if (activeLenis) return // StrictMode 二次 mount 防護
+    // 防呆：偵測到第二個同時掛載的 SmoothScroll（違反鐵則 #1）。
+    // 注意：React StrictMode 的 mount→cleanup→mount 由下方 cleanup 正確處理
+    //（cleanup 會 destroy 並清空 activeLenis），不會走進這個分支；
+    // 會走進來代表真的同時掛了兩個 provider——第二個不會生效，修掉它。
+    if (activeLenis) {
+      if (import.meta.env.DEV) {
+        console.warn('[SmoothScroll] 全站只允許一個 SmoothScroll，第二個實例不會生效')
+      }
+      return
+    }
 
     const lenis = new Lenis({ lerp: 0.1 })
     activeLenis = lenis

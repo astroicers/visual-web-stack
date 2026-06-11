@@ -24,10 +24,12 @@ import { AnimatePresence, motion } from 'motion/react'
 interface DialogProps {
   trigger: ReactNode
   title: string
+  /** 給 screen reader 的對話框描述；未提供時以 title 代用（Radix a11y 要求） */
+  description?: string
   children: ReactNode
 }
 
-export function Dialog({ trigger, title, children }: DialogProps) {
+export function Dialog({ trigger, title, description, children }: DialogProps) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -59,6 +61,14 @@ export function Dialog({ trigger, title, children }: DialogProps) {
                 transition={{ duration: 0.2, ease: 'easeOut' }}
               >
                 <DialogPrimitive.Title className="text-lg font-semibold">{title}</DialogPrimitive.Title>
+                {/* Radix 要求 Content 一定要有 Description（無障礙），缺了會在 console 警告 */}
+                {description ? (
+                  <DialogPrimitive.Description className="mt-2 text-sm opacity-70">
+                    {description}
+                  </DialogPrimitive.Description>
+                ) : (
+                  <DialogPrimitive.Description className="sr-only">{title}</DialogPrimitive.Description>
+                )}
                 {/* 鐵則 #6：彈出層內的滾動容器必須 data-lenis-prevent */}
                 <div data-lenis-prevent className="mt-4 max-h-[60vh] overflow-y-auto">
                   {children}
@@ -125,6 +135,13 @@ export function CameraRig() {
   const flightRef = useRef<ReturnType<typeof animate> | null>(null)
 
   useEffect(() => {
+    // mount 時先同步到「目前」phase——subscribe 只在變化時觸發，
+    // 若掛載當下 storyPhase 已不是初始值（lazy mount、route 切換、HMR），
+    // 少了這段相機會卡在 Canvas 預設位置直到下一次 phase 變化
+    const current = CAMERA_TARGETS[useAppStore.getState().storyPhase]
+    camera.position.set(current.x, current.y, current.z)
+    camera.lookAt(0, 0, 0)
+
     const unsubscribe = useAppStore.subscribe((state, prev) => {
       if (state.storyPhase === prev.storyPhase) return
       const target = CAMERA_TARGETS[state.storyPhase]
@@ -149,6 +166,11 @@ export function CameraRig() {
   return null
 }
 ```
+
+注意：若 Canvas 設了 `frameloop="demand"`，Anime.js 在 R3F 體系外改值
+**不會觸發重繪**——`onUpdate` 內要多呼叫 `invalidate()`
+（`useThree((s) => s.invalidate)`），本節與下一節的範例都適用。
+預設 frameloop 不受影響。
 
 ## C. Anime.js v4 × Three：材質 emissive 脈衝（createTimeline）
 
