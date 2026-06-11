@@ -15,16 +15,20 @@ visual-web-stack/
 ├── LICENSE                     # MIT
 ├── install.sh                  # 安裝腳本
 ├── .asp-fact-check.md          # 第三方套件 API 查證紀錄
-└── skill/
-    ├── SKILL.md                # 核心：四層架構 + 8 條鐵則 + 引擎分工 + 路由表
-    └── references/             # 按需載入的完整實作範例
-        ├── setup.md            # 專案初始化、依賴、Vite/Tailwind 設定、目錄結構
-        ├── scroll-system.md    # Lenis + ScrollTrigger 整合
-        ├── three-layer.md      # Canvas、Drei 工具、後處理管線、效能降級
-        ├── animation-recipes.md# Motion×Radix、Anime.js×Three 完整配方
-        ├── state-bridge.md     # Zustand transient read、store 設計
-        ├── ui-theming.md       # Radix 包裝規範、next-themes 與 3D 同步
-        └── pitfalls.md         # 地雷對照表 + 效能守則
+├── .claude-plugin/
+│   ├── marketplace.json        # Claude Code Marketplace 定義
+│   └── plugin.json             # Plugin 描述
+└── skills/
+    └── visual-web-stack/
+        ├── SKILL.md            # 核心：四層架構 + 8 條鐵則 + 引擎分工 + 路由表
+        └── references/         # 按需載入的完整實作範例
+            ├── setup.md        # 專案初始化、依賴、Vite/Tailwind 設定、目錄結構
+            ├── scroll-system.md# Lenis + ScrollTrigger 整合
+            ├── three-layer.md  # Canvas、Drei 工具、後處理管線、效能降級
+            ├── animation-recipes.md  # Motion×Radix、Anime.js×Three 完整配方
+            ├── state-bridge.md # Zustand transient read、store 設計
+            ├── ui-theming.md   # Radix 包裝規範、next-themes 與 3D 同步
+            └── pitfalls.md     # 地雷對照表 + 效能守則
 ```
 
 ## 安裝
@@ -40,7 +44,7 @@ cd visual-web-stack
 ```bash
 # 先移除既有安裝（目錄或舊連結）——若目標已是目錄，ln 會把連結建到目錄「裡面」而非取代它
 rm -rf ~/.claude/skills/visual-web-stack
-ln -s "$(pwd)/skill" ~/.claude/skills/visual-web-stack
+ln -s "$(pwd)/skills/visual-web-stack" ~/.claude/skills/visual-web-stack
 ```
 
 驗證：

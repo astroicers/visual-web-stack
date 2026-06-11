@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "visual-web-stack",
+  "description": "Visual web stack plugins for building high-quality animated web interfaces with React, Three.js, GSAP, and more",
+  "owner": {
+    "name": "astroicers"
+  },
+  "plugins": [
+    {
+      "name": "visual-web-stack",
+      "description": "Cross-package integration rules and recipes for React 19 + Vite + Tailwind + R3F + Anime.js + GSAP ScrollTrigger + Lenis + Zustand. Enforces 8 iron rules that prevent common pitfalls in animation, scroll, and 3D canvas composition.",
+      "author": {
+        "name": "astroicers"
+      },
+      "category": "frontend",
+      "source": ".",
+      "homepage": "https://github.com/astroicers/visual-web-stack"
+    }
+  ]
+}

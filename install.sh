@@ -13,7 +13,7 @@ if [ "${1:-}" = "--force" ]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SRC_DIR="$SCRIPT_DIR/skill"
+SRC_DIR="$SCRIPT_DIR/skills/visual-web-stack"
 SKILLS_DIR="$HOME/.claude/skills"
 DEST_DIR="$SKILLS_DIR/visual-web-stack"
 

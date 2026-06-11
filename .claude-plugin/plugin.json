@@ -1,0 +1,7 @@
+{
+  "name": "visual-web-stack",
+  "description": "Visual web stack skill — React + Three.js + Anime.js + GSAP + Lenis + Zustand cross-package integration rules and recipes. Enforces 8 iron rules for animation, scroll, and 3D canvas composition.",
+  "author": {
+    "name": "astroicers"
+  }
+}
