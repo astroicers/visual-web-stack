@@ -3,9 +3,10 @@
 視覺系網站技術棧的 Claude Code skill——把跨套件整合的踩坑知識固化，讓第一版
 scaffold 就符合架構規範。
 
-涵蓋技術棧：React 18 + Vite + TypeScript + Tailwind CSS + Radix UI +
+涵蓋技術棧：React 19 + Vite + TypeScript + Tailwind CSS + Radix UI +
 React Three Fiber + Drei + @react-three/postprocessing + Anime.js + Motion +
 GSAP ScrollTrigger + Lenis + Zustand + Leva + next-themes。
+（React 18 為相容備援，見「套件版本對照表」。）
 
 ## 結構
 
@@ -33,13 +34,26 @@ visual-web-stack/
 
 ## 安裝
 
+> 三種方法**擇一**即可。install.sh 與 marketplace 都會寫入
+> `~/.claude/skills/visual-web-stack`，**勿混用**以免版本不一致。
+
+### 方法 A：Claude Code Marketplace（推薦）
+
+1. Claude Code → **Manage Plugins** → **Marketplaces**
+2. 貼上 `https://github.com/astroicers/visual-web-stack` → **Add**
+3. 切到 **Plugins** tab，找到 `visual-web-stack` → **Install**
+
+更新由 Claude Code 自行管理。
+
+### 方法 B：安裝腳本
+
 ```bash
 git clone https://github.com/astroicers/visual-web-stack.git
 cd visual-web-stack
 ./install.sh          # 已存在會詢問；--force 直接覆蓋
 ```
 
-或手動 symlink（改 repo 即時生效，適合開發本 skill 時）：
+### 方法 C：手動 symlink（開發本 skill 時，改 repo 即時生效）
 
 ```bash
 # 先移除既有安裝（目錄或舊連結）——若目標已是目錄，ln 會把連結建到目錄「裡面」而非取代它
@@ -93,15 +107,15 @@ rm -rf ~/.claude/skills/visual-web-stack
 
 | 套件 | Major | 對應 references 檔 |
 |------|-------|--------------------|
-| react / react-dom | 18 | setup.md |
+| react / react-dom | 19 | setup.md |
 | vite | 8 | setup.md |
-| typescript | 5 | setup.md |
+| typescript | 5+ | setup.md |
 | tailwindcss | 4 | setup.md、ui-theming.md |
 | @radix-ui/react-*（逐 primitive） | 1 | ui-theming.md、animation-recipes.md |
-| three | 0.1xx | three-layer.md |
-| @react-three/fiber | 8（React 18 配對） | three-layer.md |
-| @react-three/drei | 9（fiber 8 配對） | three-layer.md |
-| @react-three/postprocessing | 2（fiber 8 配對） | three-layer.md |
+| three | 0.159+ | three-layer.md |
+| @react-three/fiber | 9（React 19 配對） | three-layer.md |
+| @react-three/drei | 10（fiber 9 配對） | three-layer.md |
+| @react-three/postprocessing | 3（fiber 9 配對） | three-layer.md |
 | animejs | 4（具名匯入） | animation-recipes.md |
 | motion | 12+（匯入路徑 `motion/react`） | animation-recipes.md |
 | gsap / @gsap/react | 3 / 2 | scroll-system.md |
@@ -109,6 +123,9 @@ rm -rf ~/.claude/skills/visual-web-stack
 | zustand | 5 | state-bridge.md |
 | leva | 0.10 | setup.md |
 | next-themes | 0.4 | ui-theming.md |
+
+> **React 18 相容備援**：3D 鏈降版為 fiber@8 → drei@9 → postprocessing@2（three 0.156 內），
+> 其餘套件與 8 條鐵則皆不變。詳見 `references/setup.md` 文末「版本配對速查」。
 
 ## License
 

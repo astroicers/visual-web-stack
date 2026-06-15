@@ -1,0 +1,40 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate plugin JSON
+        run: |
+          jq . .claude-plugin/plugin.json > /dev/null
+          jq . .claude-plugin/marketplace.json > /dev/null
+          echo "✅ plugin.json / marketplace.json 為合法 JSON"
+
+      - name: Check marketplace plugin entry has required fields
+        run: |
+          jq -e '.plugins[0] | .name and .version and .description and .source' \
+            .claude-plugin/marketplace.json > /dev/null
+          echo "✅ marketplace plugin 條目含 name/version/description/source"
+
+      - name: Check SKILL.md frontmatter
+        run: |
+          f="skills/visual-web-stack/SKILL.md"
+          test -f "$f" || { echo "❌ 找不到 $f"; exit 1; }
+          head -1 "$f" | grep -q '^---$' || { echo "❌ $f 缺 frontmatter 起始 ---"; exit 1; }
+          grep -q '^name:' "$f"        || { echo "❌ $f frontmatter 缺 name:"; exit 1; }
+          grep -q '^description:' "$f" || { echo "❌ $f frontmatter 缺 description:"; exit 1; }
+          echo "✅ SKILL.md frontmatter 完整（name + description）"
+
+      - name: Check all references exist
+        run: |
+          for r in setup scroll-system three-layer animation-recipes state-bridge ui-theming pitfalls; do
+            test -f "skills/visual-web-stack/references/$r.md" || { echo "❌ 缺 references/$r.md"; exit 1; }
+          done
+          echo "✅ 7 份 references 齊全"

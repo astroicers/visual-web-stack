@@ -1,7 +1,21 @@
 {
   "name": "visual-web-stack",
-  "description": "Visual web stack skill — React + Three.js + Anime.js + GSAP + Lenis + Zustand cross-package integration rules and recipes. Enforces 8 iron rules for animation, scroll, and 3D canvas composition.",
+  "version": "1.0.0",
+  "description": "Visual web stack skill — React 19 + Three.js + Anime.js + GSAP + Lenis + Zustand cross-package integration rules and recipes. Enforces 8 iron rules for animation, scroll, and 3D canvas composition.",
   "author": {
     "name": "astroicers"
-  }
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/astroicers/visual-web-stack",
+  "repository": "https://github.com/astroicers/visual-web-stack",
+  "keywords": [
+    "react",
+    "three.js",
+    "react-three-fiber",
+    "gsap",
+    "scroll-trigger",
+    "lenis",
+    "animation",
+    "claude-code-skill"
+  ]
 }

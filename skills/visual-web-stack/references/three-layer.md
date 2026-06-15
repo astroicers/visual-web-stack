@@ -152,7 +152,8 @@ export function Effects() {
   }
   if (level < 1) {
     effects.push(
-      // radialModulation / modulationOffset 在 v2 型別中是必填，少了過不了 tsc
+      // postprocessing v3 起 effect props 改為寬鬆型別，radialModulation /
+      // modulationOffset 不再強制（v2 必填）；仍建議明寫以固定色差行為
       <ChromaticAberration key="ca" offset={chromaOffset} radialModulation={false} modulationOffset={0} />,
       <Noise key="noise" premultiply opacity={0.15} />,
     )

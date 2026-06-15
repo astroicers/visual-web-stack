@@ -9,19 +9,20 @@ npm create vite@latest my-site -- --template react-ts
 cd my-site
 ```
 
-注意：本技術棧鎖定 **React 18**（R3F v8 的相容要求），若 scaffold 出來是
-React 19，降版：
+注意：本技術棧基準為 **React 19**（R3F v9 的相容要求，Vite 預設即 React 19）。
+若專案受限必須用 React 18，降版並改用相容的 3D 鏈：
 
 ```bash
 npm install react@^18.3.1 react-dom@^18.3.1
 npm install -D @types/react@^18 @types/react-dom@^18
+# 3D 層改裝 fiber@8 → drei@9 → postprocessing@2（見文末「版本配對速查」相容備援列）
 ```
 
 ## 2. 安裝依賴
 
 ```bash
-# 3D 層（版本配對：React 18 → fiber@8 → drei@9 → postprocessing@2）
-npm install three @react-three/fiber@^8 @react-three/drei@^9 @react-three/postprocessing@^2
+# 3D 層（版本配對：React 19 → fiber@9 → drei@10 → postprocessing@3）
+npm install three @react-three/fiber@^9 @react-three/drei@^10 @react-three/postprocessing@^3
 npm install -D @types/three
 
 # 滾動與動畫
@@ -172,12 +173,15 @@ export function TunableLight() {
 
 | 套件 | 版本 | 配對理由 |
 |------|------|---------|
-| react / react-dom | 18.x | R3F v8 的相容基準 |
-| @react-three/fiber | 8.x | v9 需要 React 19 |
-| @react-three/drei | 9.x | v10 需要 fiber v9 |
-| @react-three/postprocessing | 2.x | v2 對應 fiber v8 |
+| react / react-dom | 19.x | R3F v9 的相容基準（fiber 9 需 react >=19 <19.3） |
+| @react-three/fiber | 9.x | 對應 React 19 |
+| @react-three/drei | 10.x | 需 fiber v9 |
+| @react-three/postprocessing | 3.x | 需 fiber v9 |
+| three | 0.159+ | drei v10 下限（postprocessing v3 需 0.156+） |
 | tailwindcss | 4.x | CSS-first，用 @tailwindcss/vite |
 | animejs | 4.x | 具名匯入（見 animation-recipes.md） |
 | motion | 12.x+ | 匯入路徑 `motion/react` |
 
-升級任一套件 major 前，先確認此配對鏈是否同步升級（特別是 React 19 → fiber 9 → drei 10 → postprocessing 3 整條一起動）。
+**React 18 相容備援**：若必須用 React 18，整條 3D 鏈降版為 fiber@8 → drei@9 → postprocessing@2（three 0.156 內）；其餘套件與 8 條鐵則皆不變。
+
+升級/降版任一套件 major 前，先確認此配對鏈是否同步（React ↔ fiber ↔ drei ↔ postprocessing 整條一起動）。

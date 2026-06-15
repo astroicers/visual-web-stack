@@ -1,6 +1,8 @@
 # UI 與主題（Radix 包裝、next-themes、3D 場景同步）
 
 > 適用：包 Radix 元件、設定 next-themes、3D 場景要跟主題連動。
+>
+> 對應鐵則：#3（Radix × Motion 動畫需 forceMount 三件套，完整配方見 animation-recipes.md）。
 
 ## Radix Primitive 包裝規範
 

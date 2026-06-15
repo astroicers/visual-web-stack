@@ -8,10 +8,12 @@
   "plugins": [
     {
       "name": "visual-web-stack",
+      "version": "1.0.0",
       "description": "Cross-package integration rules and recipes for React 19 + Vite + Tailwind + R3F + Anime.js + GSAP ScrollTrigger + Lenis + Zustand. Enforces 8 iron rules that prevent common pitfalls in animation, scroll, and 3D canvas composition.",
       "author": {
         "name": "astroicers"
       },
+      "license": "MIT",
       "category": "frontend",
       "source": ".",
       "homepage": "https://github.com/astroicers/visual-web-stack"

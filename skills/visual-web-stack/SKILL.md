@@ -1,9 +1,9 @@
 ---
 name: visual-web-stack
 description: |
-  React 視覺系網站技術棧整合規範，涵蓋 React 18 + Vite + TypeScript +
+  React 視覺系網站技術棧整合規範，涵蓋 React 19 + Vite + TypeScript +
   Tailwind CSS + Radix UI + React Three Fiber (R3F) + Drei +
-  @react-three/postprocessing + Anime.js + Motion (Framer Motion) +
+  @react-three/postprocessing + Anime.js + Motion（原 framer-motion，匯入 motion/react）+
   GSAP ScrollTrigger + Lenis + Zustand + Leva + next-themes。
   當專案使用以下任一組合時必須載入：R3F / Three.js + React、Lenis 平滑滾動、
   GSAP ScrollTrigger、Anime.js、Motion、Radix UI、@react-three/postprocessing。
