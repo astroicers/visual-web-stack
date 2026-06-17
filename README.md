@@ -34,8 +34,8 @@ visual-web-stack/
 
 ## 安裝
 
-> 三種方法**擇一**即可。install.sh 與 marketplace 都會寫入
-> `~/.claude/skills/visual-web-stack`，**勿混用**以免版本不一致。
+> 以下方法**擇一**即可。全域安裝法（marketplace / install.sh / symlink / `npx skills -g`
+> / `gh skill`）都會寫入 `~/.claude/skills/visual-web-stack`，**勿混用**以免版本不一致。
 
 ### 方法 A：Claude Code Marketplace（推薦）
 
@@ -59,6 +59,25 @@ cd visual-web-stack
 # 先移除既有安裝（目錄或舊連結）——若目標已是目錄，ln 會把連結建到目錄「裡面」而非取代它
 rm -rf ~/.claude/skills/visual-web-stack
 ln -s "$(pwd)/skills/visual-web-stack" ~/.claude/skills/visual-web-stack
+```
+
+### 方法 D：npx skills / gh skill（跨 agent 開放安裝器）
+
+open agent-skills 安裝器，Claude Code / Cursor / opencode 等通用（會自動偵測 agent）：
+
+```bash
+# 全域（user base，所有專案共用；知識層 skill 建議用這個）
+npx skills add astroicers/visual-web-stack -g -a claude-code
+# 僅本專案（裝到 ./.claude/skills/）
+npx skills add astroicers/visual-web-stack -a claude-code
+# 先預覽會裝哪些 skill（不安裝）
+npx skills add astroicers/visual-web-stack --list
+```
+
+或用 GitHub CLI（gh v2.90+，GitHub 原生；預設目標是 Copilot，故需指定 agent）：
+
+```bash
+gh skill install astroicers/visual-web-stack --agent claude-code --scope user
 ```
 
 驗證：

@@ -2,6 +2,12 @@
 
 本專案的所有重大變更記錄於此。格式依循 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本遵循 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [Unreleased]
+
+### Added
+
+- README 方法 D：`npx skills` / `gh skill` 安裝法（跨 agent 開放安裝器，對齊 agent-skills 規範）。
+
 ## [1.0.0] - 2026-06-15
 
 首個正式版。視覺系網站技術棧的 Claude Code skill / plugin。
