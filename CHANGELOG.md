@@ -2,11 +2,18 @@
 
 本專案的所有重大變更記錄於此。格式依循 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本遵循 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
-## [Unreleased]
+## [1.0.1] - 2026-06-23
 
 ### Added
 
+- README 快速上手（5 分鐘）+ 術語速查（R3F / Lenis / ScrollTrigger / three-layer / state-bridge）。
+- README 姊妹 skill 連結（talk-craft / slidev-deck-stack，同一條工具鏈）。
+- `SKILL.md` 邊界段（不做什麼 / 何時別用、快照會過期、「貼 SKILL.md 即用」誠實底線、cross-runtime 未實測標註）。
 - README 方法 D：`npx skills` / `gh skill` 安裝法（跨 agent 開放安裝器，對齊 agent-skills 規範）。
+
+### Changed
+
+- `SKILL.md`「與…的關係」段點名姊妹 talk-craft / slidev-deck-stack（原本只提 ASP），補上家族定位。
 
 ## [1.0.0] - 2026-06-15
 

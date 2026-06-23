@@ -94,12 +94,23 @@ DOM 事件（滾動、點擊、主題切換）寫入 store；Canvas 內以 trans
 | 包 Radix 元件、設定 next-themes、3D 場景要跟主題連動 | [references/ui-theming.md](references/ui-theming.md) |
 | 出現怪 bug（觸發點漂移、Dialog 閃退、卡頓、過曝…）、上線前效能檢查 | [references/pitfalls.md](references/pitfalls.md) |
 
-## 與 AI-SOP-Protocol（ASP）的關係
+## 與 talk-craft、slidev-deck-stack 及 AI-SOP-Protocol（ASP）的關係
 
 本 skill 是**知識層**（怎麼蓋），ASP 是**治理層**（怎麼工作），兩者透過專案層
 CLAUDE.md 引用疊加，互不取代：
 
+- **與 `talk-craft`、`slidev-deck-stack` 並列**：三者是同一條工具鏈的知識層 skill，各管一個領域
+  ——talk-craft 管簡報「內容／論證」、slidev-deck-stack 管 Slidev 簡報「視覺」、本 skill 管 React
+  視覺系網站的「跨套件整合」。彼此不衝突（Slidev 走 Vue、本 skill 走 React），可同專案併用。
 - 本 skill 不取代 ASP 的品質門檻（G1–G6）、commit 流程、ADR 紀律。
 - 若專案啟用 ASP 的 `frontend_quality` profile，**三態驗證、i18n、a11y 規則
   以 ASP 為準**，本 skill 不重複定義。
 - 衝突時：工作流程聽 ASP，技術棧整合細節（本檔鐵則與 references/）聽本 skill。
+
+## 邊界（這個 skill 不做什麼 / 何時別用）
+
+- 是 **這些套件版本當下的整合快照**（React 19 / Vite / Tailwind v4 …），會隨升級**過期**——
+  版本見 `references/setup.md`，過期請重新查證。
+- 收的是**跨套件整合的踩坑知識**，**不是 React / Three.js 教學**，也不替你做設計決策。
+- **可攜底線**：本 skill 本質是 markdown + YAML frontmatter——不支援的 runtime 直接把 `SKILL.md`
+  貼進去即可用（references 按需貼）。「Cursor / opencode 通用」目前**未實測**，以此底線為準。
