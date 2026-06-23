@@ -8,6 +8,30 @@ React Three Fiber + Drei + @react-three/postprocessing + Anime.js + Motion +
 GSAP ScrollTrigger + Lenis + Zustand + Leva + next-themes。
 （React 18 為相容備援，見「套件版本對照表」。）
 
+> **姊妹 skill（同一條工具鏈）**：[`talk-craft`](https://github.com/astroicers/talk-craft)（簡報內容 / 敘事）、
+> [`slidev-deck-stack`](https://github.com/astroicers/slidev-deck-stack)（Slidev 簡報視覺）。三者都是知識層
+> skill、各管一個領域，可同專案併用。
+
+## 快速上手（5 分鐘）
+
+React + Three.js + GSAP + Lenis 一堆套件兜在一起，觸發點漂移、Dialog 閃退、卡頓、過曝？這個 skill 把跨套件整合的踩坑固化，第一版 scaffold 就對。
+
+1. **裝**：`/plugin marketplace add astroicers/visual-web-stack`（或 `npx skills add astroicers/visual-web-stack`）。
+2. 在對話說：「用 visual-web-stack 幫我搭一個 scroll-driven 3D 首頁」。
+3. 它依鐵則 scaffold：**three-layer** 架構、**Lenis** + **ScrollTrigger** 滾動、**R3F** Canvas、用 store 橋接 DOM ↔ Canvas（**state-bridge**）。
+4. 主題走 `next-themes` + token；Radix + Motion 進出場；3D 跟主題連動。
+5. 上線前過 `references/pitfalls.md` 的效能檢查。
+
+## 術語速查
+
+- **R3F** — React Three Fiber，用 React 寫 Three.js 3D 場景。
+- **Lenis** — 平滑滾動函式庫，驅動滾動進度。
+- **ScrollTrigger** — GSAP 的滾動觸發（pin / scrub）。
+- **three-layer** — DOM / Canvas / 狀態三層架構，避免互相打架。
+- **state-bridge** — 用 store 讓 DOM 與 Canvas 共享狀態（或反向）。
+
+（完整方法見 `SKILL.md` 與 `references/`。）
+
 ## 結構
 
 ```
