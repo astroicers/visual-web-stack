@@ -15,6 +15,8 @@
 | 主題切換後 3D 場景沒跟上 | 讀了 `theme`（系統模式下是 `"system"`）；或在 Canvas 內 `useTheme` 拿不到外層 context | 一律讀 `resolvedTheme`，且在 Canvas 外讀、以 prop 傳入（ui-theming.md） |
 | 模型載入時閃白／場景突然彈出 | 模型沒 preload，Suspense 邊界外又沒有 loading 遮罩 | `useGLTF.preload()` ＋ `useProgress` 做 LoadingGate 遮罩，進度到 100% 才淡出（three-layer.md） |
 | 程式化跳轉後位置錯亂、平滑失效 | 用了 `scrollIntoView`，繞過 Lenis 直接改了原生 scroll | 一律 `lenis.scrollTo()`（鐵則 #7，scroll-system.md） |
+| 開啟系統「減少動態」後動畫整個消失／畫面空白 | reduced-motion 分支只是停掉動畫，沒把內容落到終態 | 落地到**有意義的靜止終態**而非停成空白（鐵則 #9，animation-recipes.md §E） |
+| 切到別的分頁再回來，動畫大跳一格／物體瞬移 | tab 背景時 RAF 暫停，回來第一個 frame 的 delta 累積成一大跳 | useFrame / gsap.ticker 讀到的 delta 一律夾上限 `Math.min(delta, 0.05)`（animation-recipes.md §E） |
 | 開發模式滾動異常、疑似兩個 Lenis | StrictMode 的 mount→cleanup→mount **不會**留下雙實例（cleanup 會 destroy）；真的出現兩個，幾乎都是掛了兩個 SmoothScroll | 全站只掛一個 SmoothScroll；provider 內建防呆會在 dev console 警告（scroll-system.md） |
 
 ## 效能守則
@@ -113,6 +115,11 @@
        )
      }
      ```
+
+   - **離屏暫停已掛載的場景**：延後掛載只解決「還沒進視口」；已掛載的區段場景**滾出視口後
+     仍在燒 RAF**。用同一個 IntersectionObserver 在 `isIntersecting` 為 false 時把
+     `<Canvas>` 切 `frameloop="never"`（或停自寫的 RAF）、滾回再啟。這是與 demand 模式互補的
+     省電手段——demand 管「沒變化不畫」，離屏暫停管「看不到就不畫」。
 
 6. **後處理降級鏈要真的接上**：PerformanceMonitor 的 onDecline 沒接，
    低階機器就是 10 FPS 看完整條 Bloom 管線（three-layer.md）。

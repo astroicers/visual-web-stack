@@ -2,6 +2,17 @@
 
 本專案的所有重大變更記錄於此。格式依循 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本遵循 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [1.0.2] - 2026-07-05
+
+借鑒一份純 Canvas 2D explainer 的工程紀律（跨媒材共通原則），補齊動畫的無障礙與韌性守則。
+
+### Added
+
+- **鐵則 #9：尊重 `prefers-reduced-motion`** — 動畫落地到有意義的靜止終態而非停成空白。
+- `animation-recipes.md` §E：reduced-motion 的 Motion / GSAP / R3F / Anime.js 各引擎落地實作，附 RAF **delta 夾限**（防分頁切換時間爆衝）。
+- `pitfalls.md`：新增 reduced-motion 空白、delta 大跳兩列地雷；效能守則新增「離屏暫停已掛載場景」。
+- `SKILL.md` 邊界段：新增「不是每個視覺都要 R3F——純 2D 資訊圖用 Canvas 2D / inline SVG 更輕」反例。
+
 ## [1.0.1] - 2026-06-23
 
 ### Added

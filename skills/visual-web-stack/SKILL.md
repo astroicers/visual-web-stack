@@ -67,6 +67,11 @@ DOM 事件（滾動、點擊、主題切換）寫入 store；Canvas 內以 trans
    造成位置錯亂）。
 8. **DOM 側動畫只動 transform / opacity**，禁止動 layout 屬性
    （width / height / top / left / margin）——會觸發 reflow 並讓 ScrollTrigger 失準。
+9. **尊重 `prefers-reduced-motion`**：偵測到使用者要求減少動態時，動畫必須**落地到有意義的
+   靜止終態**，而非停成空白——scroll-driven 場景渲染最終幀、Motion 用 `useReducedMotion` 給
+   無位移變體、GSAP timeline `.progress(1).pause()`、Anime.js 直接設終值；R3F 可切
+   `frameloop="never"` 只渲染一次。純裝飾動畫（hero 粒子）直接降靜態。
+   （各引擎落地見 [references/animation-recipes.md](references/animation-recipes.md) §E。）
 
 ## 動畫引擎分工表（選型路由）
 
@@ -112,5 +117,9 @@ CLAUDE.md 引用疊加，互不取代：
 - 是 **這些套件版本當下的整合快照**（React 19 / Vite / Tailwind v4 …），會隨升級**過期**——
   版本見 `references/setup.md`，過期請重新查證。
 - 收的是**跨套件整合的踩坑知識**，**不是 React / Three.js 教學**，也不替你做設計決策。
+- **不是每個視覺需求都要這套棧**：示意圖／解說型動畫（節點、流程、before/after 對照）用純
+  Canvas 2D 或 inline SVG 就能高質感、零依賴，且天生好做 reduced-motion 與主題切換——反而比
+  R3F 輕、好維護。本 skill 是給**滾動驅動 3D 敘事 / WebGL 場景**的；純 2D 資訊圖別為了用而用
+  Three.js。
 - **可攜底線**：本 skill 本質是 markdown + YAML frontmatter——不支援的 runtime 直接把 `SKILL.md`
   貼進去即可用（references 按需貼）。「Cursor / opencode 通用」目前**未實測**，以此底線為準。

@@ -243,6 +243,58 @@ export function SignatureStroke() {
 }
 ```
 
+## E. prefers-reduced-motion：各引擎落地（鐵則 #9）
+
+> 原則：偵測到「減少動態」時，**不是把動畫停成空白，而是落地到有意義的靜止終態**——
+> 該顯示的資訊、該到位的相機/材質都在最終狀態呈現，只是不動。
+
+**Motion**——`useReducedMotion` 給無位移變體，時長歸零：
+
+```tsx
+import { useReducedMotion } from 'motion/react'
+
+function Reveal({ children }: { children: React.ReactNode }) {
+  const reduce = useReducedMotion()
+  return (
+    <motion.div
+      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: reduce ? 0 : 0.6, ease: 'easeOut' }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+```
+
+**GSAP**——用 `gsap.matchMedia()`，reduce 分支把 timeline 直接定格終態：
+
+```tsx
+useGSAP(() => {
+  const mm = gsap.matchMedia()
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    // 完整 ScrollTrigger scrub 動畫
+  })
+  mm.add('(prefers-reduced-motion: reduce)', () => {
+    gsap.set('.story-title', { opacity: 1, yPercent: 0 }) // 直接到終態
+  })
+}, { scope: sectionRef })
+```
+
+**R3F**——`useReducedMotion` 為真就 `frameloop="never"`，掛載後 `invalidate()` 渲染一次終態相機/材質；驅動用的 Anime.js timeline 直接 `.seek(duration)` 到終點再停。
+
+**Anime.js**——`matchMedia('(prefers-reduced-motion: reduce)').matches` 命中就跳過 `createTimeline`，直接對目標設終值（相機位置、`emissiveIntensity`、SVG `strokeDashoffset: 0`）。
+
+**delta 夾限（所有 RAF 迴圈通用）**——分頁切走再回來時 `delta` 會累積成一大跳，動畫瞬移一格。useFrame 與 gsap.ticker 同理，讀到的 delta 一律夾上限：
+
+```tsx
+useFrame((_, delta) => {
+  const dt = Math.min(delta, 0.05) // 夾在 ~20fps 一格內，防 tab 切換爆衝
+  rig.current.position.x += (target - rig.current.position.x) * dt * 4
+})
+```
+
 ## 選錯引擎的訊號
 
 - 在 React 元件上手刻 `animate(ref.current, …)` 做 hover → 應該用 Motion 的 `whileHover`。
