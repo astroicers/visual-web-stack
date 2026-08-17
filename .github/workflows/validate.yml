@@ -23,6 +23,17 @@ jobs:
             .claude-plugin/marketplace.json > /dev/null
           echo "✅ marketplace plugin 條目含 name/version/description/source"
 
+      - name: Check version consistency (plugin / marketplace / CHANGELOG)
+        run: |
+          pv=$(jq -r '.version' .claude-plugin/plugin.json)
+          mv=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
+          cv=$(grep -m1 -oE '^## \[[0-9]+\.[0-9]+\.[0-9]+\]' CHANGELOG.md | tr -d '#[] ')
+          echo "plugin.json=$pv  marketplace.json=$mv  CHANGELOG=$cv"
+          test -n "$cv" || { echo "❌ CHANGELOG 找不到版本標題（格式應為 '## [x.y.z] - YYYY-MM-DD'）"; exit 1; }
+          test "$pv" = "$mv" || { echo "❌ plugin.json($pv) 與 marketplace.json($mv) 版本不一致"; exit 1; }
+          test "$pv" = "$cv" || { echo "❌ plugin.json($pv) 落後/超前 CHANGELOG 最新版($cv)——發版時三處要一起改"; exit 1; }
+          echo "✅ 三處版本一致：$pv"
+
       - name: Check SKILL.md frontmatter
         run: |
           f="skills/visual-web-stack/SKILL.md"
